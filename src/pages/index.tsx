@@ -2,37 +2,30 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { api } from "src/utils/api";
 import ComponentCard from "@ui/ComponentCard";
+import { Badge } from "@tremor/react";
+import Spinner from "@ui/Spinner";
 
 const Home: NextPage = () => {
-  const {
-    data: components,
-    isLoading,
-    refetch,
-  } = api.component.getAll.useQuery();
-  const like = api.component.like.useMutation({
-    onSuccess: async () => {
-      await refetch();
-    },
-  });
-
-  const writeToClipboard = (data: string) => {
-    const type = "text/html";
-    const blob = new Blob([data], { type });
-    const clipboardItem = [new ClipboardItem({ [type]: blob })];
-    navigator.clipboard
-      .write(clipboardItem)
-      .then(() => alert("Copied to clipboard"))
-      .catch((err) => alert(err));
-  };
-
-  const tags = ["Category 1", "Category 2", "Category 3", "Category 4"];
+  const { data: components, isLoading} =
+    api.component.getAllComponents.useQuery();
+  const { data: allTags } = api.tags.getAllTags.useQuery();
 
   const styles = {
-    container: "max-w-screen-xl mx-auto  pt-6",
+    container: "max-w-screen-xl  mx-auto px-4 xl:px-0 pt-6",
     cardsContainer: "grid items-start grid-cols-4 gap-6",
     tagsContainer: "flex gap-4 mb-6",
-    tag: "border bg-white hover:shadow-xl p-2 px-4 hover:border-gray-400 rounded-lg",
+    tag: "",
   };
+
+  if (isLoading) {
+    return <div className="section__height justify-center flex items-center flex-col gap-4">
+      <Spinner/>
+      <div className="font-display font-medium text-xl text-gray-400 animate-pulse ">
+      Loading Components
+      </div>
+    </div>;
+  }
+
   return (
     <>
       <Head>
@@ -44,17 +37,19 @@ const Home: NextPage = () => {
         <div className={styles.container}>
           {/* TagList */}
           <div className={styles.tagsContainer}>
-            {tags?.map((item, idx) => (
-              <div key={idx} className={styles.tag}>
-                {item}
-              </div>
-            ))}
+
+          {allTags?.map((item) => (
+            <button
+            key={`tag-filter-${item?.name}`}
+            className="rounded-md border font-semibold  tracking-wider  bg-white py-1.5 px-3"
+            >
+              {item?.name}
+            </button>
+          ))}
           </div>
           <div className={styles.cardsContainer}>
             {components?.map((item) => (
-              <>
-                <ComponentCard key={item?.id} data={item} />
-              </>
+              <ComponentCard key={`component-${item?.id}`} data={item} />
             ))}
           </div>
         </div>

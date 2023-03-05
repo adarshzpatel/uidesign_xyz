@@ -24,28 +24,52 @@ export const componentRouter = createTRPCRouter({
     // TODO : IMPLEMENT AUTH CHECK & make it private procedure
     create: publicProcedure.input(z.object(
       {
-         title:z.string().min(5),
-         description:z.string(),
+         title:z.string().min(3),
          tags:z.array(z.string()),
          component: z.coerce.string(),
          thumbnailUrl:z.string().url(),
       }
     )).mutation(async ({input,ctx}) => {
          try{
+            const component = Buffer.from(input.component,'utf-8')
             return ctx.prisma.component.create({
                data: {
                   title:input.title,
-                  component:input.component,
+                  component:component,
                   thumbnailUrl:input.thumbnailUrl,
+                  tags:{
+                     connectOrCreate:input?.tags?.map((item)=>({where:{name:item},create:{name:item}}))
+                  }
                }
             })
          } catch(err){
             console.log("Create Error : ", err)
          }
     }),
-    getAll:publicProcedure.query(async({ctx})=>{
-      return await ctx.prisma.component.findMany({orderBy:{likes:'desc'}})
+
+    createTag: publicProcedure.input(z.object({
+      name:z.string()
+    })).mutation(async({input,ctx}) => {
+      try{
+         await ctx.prisma.tag.create({
+            data:{
+               name:input.name
+            }
+         })
+      }catch(err){
+         console.log("Create tag Error",err)
+      }
+    }),
+
+   getAllComponents:publicProcedure.query(async({ctx})=>{
+      let res = await ctx.prisma.component.findMany()
+      return res.map((item)=>({...item,component:item?.component.toString()}))
+}),
+
+   getAllTags:publicProcedure.query(async({ctx})=>{
+      return await ctx.prisma.component.findMany()
    }),
+
    like: publicProcedure.input(z.object({
       id:z.string()
    })).mutation(async({input,ctx})=>{
@@ -55,4 +79,5 @@ export const componentRouter = createTRPCRouter({
          console.log("like error",err)
       }
    })
+
 });

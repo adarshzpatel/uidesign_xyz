@@ -1,10 +1,10 @@
 import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-
-import { api } from "../utils/api";
-import "../styles/globals.css";
 import AppLayout from "@components/layout/AppLayout";
+import { api } from "../utils/api";
+import '@tremor/react/dist/esm/tremor.css';
+import "../styles/globals.css";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -16,7 +16,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
 
       <Component {...pageProps} />
       </AppLayout>
-    </SessionProvider>
+   </SessionProvider>
   );
 };
 

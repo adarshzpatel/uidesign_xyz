@@ -11,6 +11,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily:{
+        display:["Clash Display"]
+      },
       colors: {
         gray:neutral,
         primary:purple

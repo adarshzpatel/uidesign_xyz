@@ -1,5 +1,6 @@
 import React from 'react'
 import Navbar from './Navbar'
+import { Toaster } from 'react-hot-toast'
 
 
 type Props = {
@@ -9,6 +10,7 @@ type Props = {
 const AppLayout = ({children}:Props) => {
   return (
     <>
+    <Toaster position='bottom-left'/>
     <Navbar/>
     <div>{children}</div>
     </>

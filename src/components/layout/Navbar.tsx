@@ -1,5 +1,3 @@
-import React from "react";
-import { FiPlus } from "react-icons/fi";
 import NextLink from 'next/link'
 
 const styles = {
@@ -13,8 +11,8 @@ const Navbar = () => {
     <>
       <header className={styles.header}>
         <nav className={styles.nav}>
-          <NextLink href="/" className="font-bold text-xl">
-            Design Library
+          <NextLink href="/" className="font-semibold tracking-wider font-display text-2xl ">
+            DESIGN 
           </NextLink>
         </nav>
       </header>

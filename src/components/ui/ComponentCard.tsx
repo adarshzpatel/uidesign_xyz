@@ -1,9 +1,14 @@
 import { Component } from "@prisma/client";
 import React from "react";
+import writeToClipboard from "src/utils/writeToClipboard";
 
 type Props = {
-  data: Component;
-};
+  data: {
+    id:string
+    thumbnailUrl:string 
+    component:string
+  }
+}
 
 const Icon = () => {
   return (
@@ -26,16 +31,23 @@ const Icon = () => {
 };
 
 const ComponentCard = ({ data }: Props) => {
+
+  const handleCopy = () =>{
+    writeToClipboard(data?.component as unknown as string)
+  }
+
   const styles = {
+    title:"absolute top-2 font-medium bg-white px-2 left-2",
     container:
       "bg-white p-4 aspect-[3/2.5]  group relative flex items-center hover:bg-gray-300 duration-200 ease-out  hover:border-gray-400 justify-center border rounded-lg",
     copyButton:
-      "hidden group-hover:flex absolute bg-white bottom-4 items-center justify-center gap-2 py-2 rounded-lg px-4 shadow-xl border border-gray-400 active:bg-gray-200 active:scale-95 duration-100 ease-out font-semibold",
+      "hidden group-hover:flex font-display absolute bg-white bottom-4 items-center justify-center gap-2 py-2 rounded-lg px-4 shadow-xl border border-gray-400 active:bg-gray-200 active:scale-95 duration-100 ease-out font-medium",
   };
   return (
     <div className={styles.container}>
-      Loading ....
-      <button className={styles.copyButton}>
+      {/* <div className={styles?.title}>{data?.title}</div> */}
+      <img className="h-full w-full object-contain " src={data?.thumbnailUrl} alt={data?.id} />
+      <button onClick={handleCopy} className={styles.copyButton}>
         <Icon />
         Copy To Figma
       </button>

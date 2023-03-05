@@ -6,12 +6,13 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "mysql"
     // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
     // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
     url      = env("DATABASE_URL")
+    relationMode = "prisma"
 }
 
 // TODO : Add Tags field
@@ -19,7 +20,7 @@ model Component {
     id           String   @id @default(cuid())
     title        String
     // description String
-    component    String
+    component    Bytes
     thumbnailUrl String
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
@@ -29,8 +30,7 @@ model Component {
 }
 
 model Tag{
-    id String @id @default(cuid())
-    name String
+    name String @id @unique
     components Component[]
 }
 
