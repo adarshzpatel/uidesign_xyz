@@ -10,7 +10,6 @@ import {
   Subtitle,
   Text,
 } from "@tremor/react";
-import { TagSelectInput } from "@ui/TagSelectInput";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -18,7 +17,6 @@ import { toast } from "react-hot-toast";
 import { FiX } from "react-icons/fi";
 import { api } from "src/utils/api";
 import toBase64 from "src/utils/base64";
-import getBase64 from "src/utils/base64";
 
 type Props = {};
 

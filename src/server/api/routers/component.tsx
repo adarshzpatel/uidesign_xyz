@@ -32,7 +32,7 @@ export const componentRouter = createTRPCRouter({
     )).mutation(async ({input,ctx}) => {
          try{
             const component = Buffer.from(input.component,'utf-8')
-            return ctx.prisma.component.create({
+            return await ctx.prisma.component.create({
                data: {
                   title:input.title,
                   component:component,
@@ -64,7 +64,7 @@ export const componentRouter = createTRPCRouter({
    getAllComponents:publicProcedure.query(async({ctx})=>{
       let res = await ctx.prisma.component.findMany()
       return res.map((item)=>({...item,component:item?.component.toString()}))
-}),
+   }),
 
    getAllTags:publicProcedure.query(async({ctx})=>{
       return await ctx.prisma.component.findMany()
